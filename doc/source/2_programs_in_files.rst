@@ -1,3 +1,5 @@
+.. _programs_files:
+
 Programs in files
 ===================
 
@@ -70,7 +72,7 @@ terminal command:
 
 .. code-block:: console
 
-   (my_venv) $ python3 -m pip install numpy
+   (my_venv) $ python -m pip install numpy
 
 It is also possible to invoke pip directly using the command `pip3`,
 but there are some circumstances where that might result in pip using
@@ -84,7 +86,7 @@ Pip can also be used to upgrade a package to the latest version:
 
 .. code-block:: console
 
-   (my_venv) $ python3 -m pip install --upgrade numpy
+   (my_venv) $ python -m pip install --upgrade numpy
 
 The Python interpreter
 ----------------------
@@ -189,26 +191,35 @@ the file as a Python file. Having remembered to save :file:`hello.py` to
 disk from the text editor, we can now run the program. Open a
 terminal, and change to the folder (directory) where you saved
 :file:`hello.py`. For example, if :file:`hello.py` is in the directory :file:`src` in
-your home directory, then you would type the following:
+your home directory, then on most operating systems, you would type the following:
 
 .. code-block:: console
 
-   $ cd src
-   $ python3 hello.py
+    $ cd src
+    $ python3 hello.py
 
-The dollar sign is the command prompt. Its different on some systems,
-for example, it's often a greater than sign (`>`). The text to the left
-of the command prompt might also be different depending on which
-terminal program you are using on which operating system, but we are
-only concerned with the commands to the right of the prompt. The first
-of these, `cd` (*change directory*) switches the current folder to
-:file:`src`. The second command actually runs the Python interpreter on
-:file:`hello.py`. Depending on what is installed on your computer, it might
-also be possible to leave off the `3` at the end of `python3`, however
-on some systems the plain `python` command is still linked to the old
-version 2 of Python, so it's better to be explicit and type
-`python3`. When we press the :kbd:`enter` key after the last line above,
-our tiny Python script :file:`hello.py` runs and the following is displayed:
+on Windows you might instead need to type:
+
+.. code-block:: console
+
+    > cd src
+    > py hello.py
+
+
+The dollar sign is the command prompt. Its different on some systems, for
+example, it's often a greater than sign (`>`). The text to the left of the
+command prompt might also be different depending on which terminal program you
+are using on which operating system, but we are only concerned with the commands
+to the right of the prompt. The first of these, `cd` (*change directory*)
+switches the current folder to :file:`src`. The second command actually runs the
+Python interpreter on :file:`hello.py`. Depending on what is installed on your
+computer, it might also be possible to leave off the `3` at the end of
+`python3`, however on some systems the plain `python` command is still linked to
+the old version 2 of Python, so it's better to be explicit and type `python3`.
+Once we start working with Python :term:`virtual environments <virtual
+environment>`, it will always be safe to use `python` without the 3. When we
+press the :kbd:`enter` key after the last line above, our tiny Python script
+:file:`hello.py` runs and the following is displayed:
 
 .. code-block:: console
 
@@ -616,7 +627,7 @@ you would type:
 
 .. code-block:: console
 
-   (my_venv) $ python3 -m pip install -e folder/
+   (my_venv) $ python -m pip install -e folder/
 
 replacing `folder` with the name of the top-level folder of your
 repository: the folder containing :file:`setup.py`. The option flag `-e`
@@ -669,7 +680,7 @@ package, so you can install it into your current environment using:
 
 .. code-block:: console
 
-    $ python3 -m pip install pytest
+    $ python -m pip install pytest
 
 Pytest tests
 ~~~~~~~~~~~~
@@ -902,6 +913,8 @@ Exercises
     you will use for this course on your computer. Start with an overall folder
     for the module, and create a virtual environment in that module.
 
+.. _course_repo:
+
 .. proof:exercise::
 
     Visit the `GitHub repository for these notes
@@ -937,7 +950,7 @@ Exercises
 
     .. code-block:: console
 
-        $ pytest tests/test__exercise_2_4.py
+        $ pytest tests/test_exercise_2_4.py
 
     Then push your code to GitHub and check that the tests pass there too.
 

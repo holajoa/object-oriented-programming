@@ -891,12 +891,12 @@ Exercises
 .. panels::
     :card: quiz shadow
 
-    .. link-button:: https://bb.imperial.ac.uk/webapps/blackboard/content/launchAssessment.jsp?course_id=_23985_1&content_id=_2049499_1&mode=view
+    .. link-button:: https://bb.imperial.ac.uk/webapps/assessment/take/launchAssessment.jsp?course_id=_25965_1&content_id=_2054444_1
         :text: This week's quiz
         :classes: stretched-link 
 
 
-Obtain the :doc:`skeleton code for these exercises from GitHub classroom <not_released>`. 
+Obtain the `skeleton code for these exercises from GitHub Classroom <https://classroom.github.com/a/mElLR0AD>`__. 
 The skeleton code contains a :mod:`polynomial` package with a version of 
 the :class:`Polynomial` class.
 
@@ -919,7 +919,7 @@ the :class:`Polynomial` class.
 
 .. proof:exercise::
 
-    Define a function `derivative` in :file:`polynomial.py` which takes a
+    Define a function `derivative` in :file:`polynomials.py` which takes a
     :class:`Polynomial` and returns a new :class:`Polynomial` which is its
     derivative. Also define a :meth:`dx` method on the :class:`Polynomial` class
     which returns the derivative of that :class:`Polynomial`. Rather than
@@ -934,7 +934,7 @@ the :class:`Polynomial` class.
        whose :term:`constructor` takes two user parameters, `centre` and `radius`.
        `centre` should be a length 2 sequence containing the two-dimensional
        coordinates of the centre, while `radius` is the radius of the circle.
-    2. Add an :ref:`import <modules>` statement to :file:`shape.__init__.py` so
+    2. Add an :ref:`import <modules>` statement to :file:`shape/__init__.py` so
        that the following code works:
 
        .. code-block:: python3
@@ -951,4 +951,11 @@ the :class:`Polynomial` class.
           from shape import Circle
           c = Circle((1., 0.), 2)
           print((0.5, 0.5) in c)
+
+.. proof:exercise::
+
+    Make the :mod:`circle` and :mod:`polynomial` packages installable. As with
+    last week's exercise, pytest can't test this so you'll need to push to
+    GitHub and check that the autograding tests pass there.
+
         

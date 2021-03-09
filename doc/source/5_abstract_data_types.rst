@@ -34,6 +34,20 @@ structures which could be used to implement them.
 Stacks
 ------
 
+.. dropdown:: Video: stacks as an abstract data type.
+
+    .. container:: vimeo
+
+        .. raw:: html
+
+            <iframe src="https://player.vimeo.com/video/506479213"
+            frameborder="0" allow="autoplay; fullscreen"
+            allowfullscreen></iframe>
+
+    Imperial students can also `watch this video on Panopto
+    <https://imperial.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=b014e13a-82ca-4a57-ac7f-acc000e64349>`__.
+
+
 Possibly the simplest abstract data type which is not synonymous with
 a Python type is the :term:`stack`. A stack is a sequence of objects
 in which only the most recently added object is accessible. The image
@@ -52,11 +66,6 @@ and `pop` to return the most recently added object, and remove it from
 the sequence. :numref:`stackdiag` shows these operations. It is also common to add an additional operation of
 `peek`, which returns the most recently added object without removing
 it from the stack.
-
-.. note::
-
-   The stack operations in the diagram are wrong. The stack is back to front and
-   the wrong value is popped.
 
 .. _stackdiag:
 
@@ -82,17 +91,17 @@ it from the stack.
       }
 
       group second{
-      "24 "; 12;
+      12; "24 ";
       color =  orange
       }
 
       group third{
-      "24  "; "12 "; 57;
+      57 ;"12 "; "24  ";
       color =  orange
       }
 
       group fourth{
-      "24   "; "12  ";
+      "12  "; "24   ";
       color =  orange
       }
 
@@ -135,7 +144,7 @@ and a stack. Each number encountered in the expression is pushed onto
 the stack, while each operator pops the right number of arguments off
 the stack and pushes the result onto the stack. At the end of the
 calculation, the result of the calculation is on the top of the stack.
-:numref:`rpcalc` shows :term:`pseudocode`, for a reverse Polish
+:numref:`rpcalc` shows :term:`pseudocode` for a reverse Polish
 calculator.
 
 .. _rpcalc:
@@ -274,6 +283,20 @@ tasks.
 Algorithmic complexity
 ----------------------
 
+.. dropdown:: Video: dynamic arrays and algorithmic complexity.
+
+    .. container:: vimeo
+
+        .. raw:: html
+
+            <iframe src="https://player.vimeo.com/video/506479208"
+            frameborder="0" allow="autoplay; fullscreen"
+            allowfullscreen></iframe>
+
+    Imperial students can also `watch this video on Panopto
+    <https://imperial.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=516115a0-b13d-4693-951b-acc000e642ff>`__.
+
+
 The second reason that understanding abstract data types is important
 is that a good implementation of a well-designed abstract data type
 will have well-defined performance characteristics. In particular, the
@@ -352,7 +375,7 @@ data structure.
     as :math:`n` approaches infinity, while in numerical analysis the
     independent variable approaches 0. This difference between two closely
     related fields is often confusing, particularly since both disciplines
-    conventionally leave out the limit. It's worth keeping in mind that the
+    conventionally leave out the limit. It's worth keeping in mind the
     difference, because a numerical algorithm with :math:`O(h^4)` error is
     really rather good since `h` is small, but an algorithm with :math:`O(n^4)`
     cost is very expensive indeed!
@@ -535,6 +558,20 @@ this.
 Queues and deques
 -----------------
 
+.. dropdown:: Video: deques and ring buffers.
+
+    .. container:: vimeo
+
+        .. raw:: html
+
+            <iframe src="https://player.vimeo.com/video/506710190"
+            frameborder="0" allow="autoplay; fullscreen"
+            allowfullscreen></iframe>
+
+    Imperial students can also `watch this video on Panopto
+    <https://imperial.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=5ba7fde3-8ca9-48e2-b66b-acc100bd1953>`__.
+
+
 A :term:`queue` is, like a :term:`stack`, an ordered sequence of
 objects. The difference is that the only accessible item in the
 sequence is the *earliest* added. Items can be added to the back of
@@ -581,6 +618,20 @@ buffer.
 
 Linked lists
 ------------
+
+
+.. dropdown:: Video: linked lists.
+
+    .. container:: vimeo
+
+        .. raw:: html
+
+            <iframe src="https://player.vimeo.com/video/506743244"
+            frameborder="0" allow="autoplay; fullscreen"
+            allowfullscreen></iframe>
+
+    Imperial students can also `watch this video on Panopto
+    <https://imperial.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d1b2b176-066a-4d68-aa01-acc100eec5c6>`__.
 
 One disadvantage of a deque (and hence of a stack or queue) is that inserting an
 object into the middle of the sequence is often an :math:`O(n)` operation,
@@ -736,6 +787,20 @@ based on ring buffers.
 
 The iterator protocol
 ---------------------
+
+.. dropdown:: Video: the iterator protocol.
+
+    .. container:: vimeo
+
+        .. raw:: html
+
+            <iframe src="https://player.vimeo.com/video/506743250"
+            frameborder="0" allow="autoplay; fullscreen"
+            allowfullscreen></iframe>
+
+    Imperial students can also `watch this video on Panopto
+    <https://imperial.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=f37ae26c-a39a-4757-bc0d-acc100eec588>`__.
+
 
 The abstract data types we have considered here are collections of
 objects, and one common abstract operation which is applicable to
@@ -965,15 +1030,25 @@ Glossary
 Exercises
 ---------
 
-Obtain the :doc:`skeleton code for these exercises from GitHub classroom <not_released>`. 
+.. panels::
+    :card: quiz shadow
+
+    .. link-button:: https://bb.imperial.ac.uk/webapps/assessment/take/launchAssessment.jsp?course_id=_25965_1&content_id=_2077681_1&mode=cpview
+        :text: This week's quiz
+        :classes: stretched-link 
+
+
+Obtain the `skeleton code for these exercises from GitHub classroom
+<https://classroom.github.com/a/eHigwP_C>`__. You will also need to install the pytest-timeout package.
 
 .. proof:exercise::
 
     In this week's skeleton repository, create a :term:`package` called
     :mod:`adt_examples` with a :term:`module` called
-    :mod:`adt_examples.fibonacci`. Create a class :class:`Fib` implementing the
-    iterator protocol which returns the Fibonacci numbers. In other words, the
-    following code should print the `Fibonacci` numbers under 100:
+    :mod:`adt_examples.fibonacci`. Make the package installable and install in
+    editable mode. Create a class :class:`Fib` implementing the iterator
+    protocol which returns the Fibonacci numbers. In other words, the following
+    code should print the `Fibonacci` numbers under 100:
 
     .. code-block:: python3
 
@@ -1020,10 +1095,10 @@ Obtain the :doc:`skeleton code for these exercises from GitHub classroom <not_re
     In this week's skeleton repository, create a :term:`module`
     :mod:`adt_examples.deque` containing a class :class:`Deque` implementing a
     :term:`deque`. Your implementation should use a ring buffer implemented
-    as a Python list. When the :class:`Deque` is instantiated, the ring buffer
-    should have space for a few items. When it runs out of space it should
-    double in size. It should also halve in size when it drops to only about 40%
-    full. 
+    as a Python list. In order to make things somewhat simpler, we will use a
+    fixed size ring buffer, which doesn't grow and shrink with the queue. The
+    :term:`constructor` of your :class:`Deque` should take a single integer
+    argument which is the size of the list you will use as your ring buffer.
 
     Implement the following methods:
 
@@ -1049,23 +1124,22 @@ Obtain the :doc:`skeleton code for these exercises from GitHub classroom <not_re
         The :meth:`~object.__len__` :term:`special method`. This should return
         the number of items currently in the :class:`Deque`.
 
-    :meth:`_size`
-        This should return the current length of the ring buffer, including both
-        occupied and empty spaces.
-
     In addition to the above methods, you should ensure that :class:`Deque`
     implements the iterator protocol. This should return the items in the queue,
-    starting from the end, and working backwards. Iterating over the
+    starting from the first to the last. Iterating over the
     :class:`Deque` should not modify the :class:`Deque`.
 
     .. hint::
 
-        You can create a list of length 10 (for example) containing only
+        You can create a list of length `n` containing only
         :data:`None` using the following syntax:
 
         .. code-block:: python3
 
-            l = [None] * 10
+            l = [None] * n
+
+        The modulo operator, `%` and integer division operator `//` are also likely
+        to be very useful.
 
     .. hint::
 

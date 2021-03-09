@@ -3,11 +3,25 @@
 Inheritance and composition
 ===========================
 
+.. dropdown:: Video: inheritance and composition.
+
+    .. container:: vimeo
+
+        .. raw:: html
+
+            <iframe src="https://player.vimeo.com/video/516216973"
+            frameborder="0" allow="autoplay; fullscreen"
+            allowfullscreen></iframe>
+
+    Imperial students can also `watch this video on Panopto
+    <https://imperial.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d744e96d-14d7-4e51-9b67-acd900dc916f>`__.
+
+
 A key feature of abstractions is composability: the ability to make a
 complex object or operation out of several components. We can compose
 objects by simply making one object a :term:`attribute` of another
 object. This combines objects in a *has a* relationship. For example
-the :class:`Polynomial` class introduced in :numref:`chapter %s
+the :class:`~example_code.polynomial.Polynomial` class introduced in :numref:`chapter %s
 <objects>` *has a* :class:`tuple` of coefficients. Object composition of
 this sort is a core part of :term:`encapsulation`.
 
@@ -78,12 +92,26 @@ It turns out that :func:`issubclass` is reflexive (classes are subclasses of the
 This means that, in a manner analogous to subset inclusion, the
 :term:`subclass` relationship forms a partial order on the set of all
 classes. This relationship defines another core mechanism for creating a new
-class from existing classes, :term:`inheritance`. If one class is a subclass of
+class from existing classes: :term:`inheritance`. If one class is a subclass of
 another then we say that it inherits from that class. Where composition defines
 a *has a* relationship, inheritance defines an *is a* relationship.
 
 An example from group theory
 ----------------------------
+
+.. dropdown:: Video: an example from group theory.
+
+    .. container:: vimeo
+
+        .. raw:: html
+
+            <iframe src="https://player.vimeo.com/video/516277973"
+            frameborder="0" allow="autoplay; fullscreen"
+            allowfullscreen></iframe>
+
+    Imperial students can also `watch this video on Panopto
+    <https://imperial.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=8931fde6-f808-4e6f-9526-acd901069280>`__.
+
 
 In order to illustrate how composition and inheritance work, let's suppose that
 we want to write a module that implements some basic groups. Recall that a group
@@ -110,10 +138,10 @@ cyclic group element type which can take the relevant values and which
 implements the group operation. This would be unfortunate for at least two
 reasons:
 
-1. Because each group needs several elements, need a different element *type*
+1. Because each group needs several elements, we would need a different element *type*
    for each *instance* of a cyclic group. The number of classes needed would grow very fast!
-2. Adding a new family of groups would require adding both a group class and a
-   set of element classes. On grounds of simplicity and robustness, always key considerations,
+2. Adding a new family of groups would require us to add both a group class and a
+   set of element classes. On the basis of :term:`parsimony`,
    we would much prefer to only add one class in order to add a new family of
    groups.
    
@@ -140,49 +168,67 @@ minimal characterisation of a group will suffice.
     :linenos:
 
     class Element:
+        """An element of the specified group.
+
+        Parameters
+        ----------
+        group:
+            The group of which this is an element.
+        value:
+            The individual element value.
+        """
+
         def __init__(self, group, value):
             group._validate(value)
             self.group = group
             self.value = value
 
         def __mul__(self, other):
-            '''Use * to represent the group operation.'''
+            """Use * to represent the group operation."""
             return Element(self.group,
-                           self.group.operation(self.value,
+                        self.group.operation(self.value,
                                                 other.value))
 
         def __str__(self):
+            """Return a string of the form value_group."""
             return f"{self.value}_{self.group}"
 
         def __repr__(self):
-            return f"{self.__class__.__name__}" \
+            """Return the canonical string representation of the element."""
+            return f"{type(self).__name__}" \
                 f"({repr(self.group), repr(self.value)})"
 
 
     class CyclicGroup:
-        '''A cyclic group represented by integer addition modulo group order.'''
+        """A cyclic group represented by integer addition modulo group order."""
+
         def __init__(self, order):
             self.order = order
 
         def _validate(self, value):
-            '''Ensure that value is a legitimate element value in this group.'''
-            if not (isinstance(value, Integral) and 0 <= value < self.size):
+            """Ensure that value is a legitimate element value in this group."""
+            if not (isinstance(value, Integral) and 0 <= value < self.order):
                 raise ValueError("Element value must be an integer"
-                                 f" in the range [0, {self.size})")
+                                f" in the range [0, {self.order})")
 
         def operation(self, a, b):
+            """Perform the group operation on two values.
+
+            The group operation is addition modulo n.
+            """
             return (a + b) % self.order
 
         def __call__(self, value):
-            '''Provide a convenient way to create elements of this group.'''
+            """Create an element of this group."""
             return Element(self, value)
 
         def __str__(self):
+            """Represent the group as Gd."""
             return f"C{self.order}"
 
         def __repr__(self):
-            return f"{self.__class__.__name__}({repr(self.order)})"
-
+            """Return the canonical string representation of the group."""
+            return f"{type(self).__name__}({repr(self.order)})"
 
 :numref:`cyclic_group` shows an implementation of our minimal conception of
 cyclic groups. Before considering it in any detail let's try it out to observe
@@ -198,7 +244,7 @@ the concrete effects of the classes:
     2_C5
 
 We observe that we are able to create the cyclic group of order 5. Due to the
-definition of the :meth:`__call__` :term:`special method` at line 35, we are
+definition of the :meth:`~object.__call__` :term:`special method` at line 35, we are
 then able to create elements of the group by calling the group object. The group
 operation then has the expected effect:
 
@@ -214,32 +260,31 @@ integer between 0 and 5, an exception is raised.
 
 .. code-block:: ipython3
 
-    In [4]: C(1.5)
     ---------------------------------------------------------------------------
     ValueError                                Traceback (most recent call last)
     <ipython-input-4-a5d8472d4486> in <module>
     ----> 1 C(1.5)
 
     ~/docs/principles_of_programming/object-oriented-programming/example_code/groups_basic.py in __call__(self, value)
-        38     def __call__(self, value):
-        39         '''Provide a convenient way to create elements of this group.'''
-    ---> 40         return Element(self, value)
-        41 
-        42     def __str__(self):
+        58     def __call__(self, value):
+        59         """Create an element of this group."""
+    ---> 60         return Element(self, value)
+        61 
+        62     def __str__(self):
 
     ~/docs/principles_of_programming/object-oriented-programming/example_code/groups_basic.py in __init__(self, group, value)
-        4 class Element:
-        5     def __init__(self, group, value):
-    ----> 6         group._validate(value)
-        7         self.group = group
-        8         self.value = value
+        17 
+        18     def __init__(self, group, value):
+    ---> 19         group._validate(value)
+        20         self.group = group
+        21         self.value = value
 
     ~/docs/principles_of_programming/object-oriented-programming/example_code/groups_basic.py in _validate(self, value)
-        30         '''Ensure that value is a legitimate element value in this group.'''
-        31         if not (isinstance(value, Integral) and 0 <= value < self.order):
-    ---> 32             raise ValueError("Element value must be an integer"
-        33                              f" in the range [0, {self.order})")
-        34 
+        46         """Ensure that value is a legitimate element value in this group."""
+        47         if not (isinstance(value, Integral) and 0 <= value < self.order):
+    ---> 48             raise ValueError("Element value must be an integer"
+        49                              f" in the range [0, {self.order})")
+        50 
 
     ValueError: Element value must be an integer in the range [0, 5)
 
@@ -262,6 +307,20 @@ is delegated to the group by calling :meth:`self.group.operation`.
 General linear groups
 ~~~~~~~~~~~~~~~~~~~~~
 
+.. dropdown:: Video: inheritance.
+
+    .. container:: vimeo
+
+        .. raw:: html
+
+            <iframe src="https://player.vimeo.com/video/516698411"
+            frameborder="0" allow="autoplay; fullscreen"
+            allowfullscreen></iframe>
+
+    Imperial students can also `watch this video on Panopto
+    <https://imperial.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=8686b42d-415f-4122-82c5-acda00e39b9c>`__.
+
+
 We still haven't encountered inheritance, though. Where does that come into the
 story? Well first we'll need to introduce at least one more family of groups.
 For no other reason than convenience, let's choose :math:`G_n`, the general
@@ -277,30 +336,37 @@ group as follows:
     :linenos:
 
     class GeneralLinearGroup:
-        '''The general linear group represented by degree x degree matrices.'''
+        """The general linear group represented by degree x degree matrices."""
+
         def __init__(self, degree):
             self.degree = degree
 
         def _validate(self, value):
-            '''Ensure that value is a legitimate element value in this group.'''
-            value = np.asarray(value)
-            if not (value.shape == (self.degree, self.degree)):
+            """Ensure that value is a legitimate element value in this group."""
+            if not (isinstance(value, np.ndarray),
+                    value.shape == (self.degree, self.degree)):
                 raise ValueError("Element value must be a "
-                                 f"{self.degree} x {self.degree}"
-                                 "square array.")
+                                f"{self.degree} x {self.degree}"
+                                "square array.")
 
         def operation(self, a, b):
+            """Perform the group operation on two values.
+
+            The group operation is matrix multiplication.
+            """
             return a @ b
 
         def __call__(self, value):
-            '''Provide a convenient way to create elements of this group.'''
+            """Create an element of this group."""
             return Element(self, value)
 
         def __str__(self):
+            """Represent the group as Gd."""
             return f"G{self.degree}"
 
         def __repr__(self):
-            return f"{self.__class__.__name__}({repr(self.degree)})"
+            """Return the canonical string representation of the group."""
+            return f"{type(self).__name__}({repr(self.degree)})"
 
 We won't illustrate the operation of this class, though the reader is welcome to
 :keyword:`import` the :mod:`example_code.groups_basic` module and experiment.
@@ -330,51 +396,59 @@ does.
     :linenos:
 
     class Group:
-        '''A base class containing methods common to many groups.
+        """A base class containing methods common to many groups.
 
-        Each subclass represents a family of parametrised groups.'''
+        Each subclass represents a family of parametrised groups.
+
+        Parameters
+        ----------
+        n: int
+            The primary group parameter, such as order or degree. The
+            precise meaning of n changes from subclass to subclass.
+        """
+
         def __init__(self, n):
-            '''
-            Parameters
-            ----------
-                n: int
-                    The primary group parameter, such as order or degree. The
-                    precise meaning of n changes from subclass to subclass.
-            '''
             self.n = n
 
         def __call__(self, value):
-            '''Provide a convenient way to create elements of this group.'''
+            """Create an element of this group."""
             return Element(self, value)
 
         def __str__(self):
-            return f"{self.notation}{self.n}"
+            """Return a string in the form symbol then group parameter."""
+            return f"{self.symbol}{self.n}"
 
         def __repr__(self):
-            return f"{self.__class__.__name__}({repr(self.n)})"
+            """Return the canonical string representation of the element."""
+            return f"{type(self).__name__}({repr(self.n)})"
 
 
     class CyclicGroup(Group):
-        '''A cyclic group represented by integer addition modulo n.'''
-        notation = "C"
+        """A cyclic group represented by integer addition modulo n."""
+
+        symbol = "C"
 
         def _validate(self, value):
-            '''Ensure that value is a legitimate element value in this group.'''
+            """Ensure that value is a legitimate element value in this group."""
             if not (isinstance(value, Integral) and 0 <= value < self.n):
                 raise ValueError("Element value must be an integer"
                                 f" in the range [0, {self.n})")
 
         def operation(self, a, b):
-            '''The group operation is addition modulo n.'''
+            """Perform the group operation on two values.
+
+            The group operation is addition modulo n.
+            """
             return (a + b) % self.n
 
 
     class GeneralLinearGroup(Group):
-        '''The general linear group represented by n x n matrices.'''
-        notation = "G"
+        """The general linear group represented by n x n matrices."""
+
+        symbol = "G"
 
         def _validate(self, value):
-            '''Ensure that value is a legitimate element value in this group.'''
+            """Ensure that value is a legitimate element value in this group."""
             value = np.asarray(value)
             if not (value.shape == (self.n, self.n)):
                 raise ValueError("Element value must be a "
@@ -382,7 +456,10 @@ does.
                                 "square array.")
 
         def operation(self, a, b):
-            '''The group operation is matrix multiplication.'''
+            """Perform the group operation on two values.
+
+            The group operation is matrix multiplication.
+            """
             return a @ b
 
 :numref:`groups_inheritance` shows a new implementation of
@@ -398,10 +475,10 @@ Inheritance syntax
 ~~~~~~~~~~~~~~~~~~
 
 Look again at the definition of :class:`~example_code.groups.CyclicGroup` on
-line 26:
+line 29:
 
 .. code-block:: python3
-    :lineno-start: 26
+    :lineno-start: 29
 
     class CyclicGroup(Group):    
 
@@ -412,7 +489,7 @@ is defined. It means that :class:`CyclicGroup` is a :term:`child class` of
 :class:`Group`. The effect of this is that any :term:`attribute` defined on the
 :term:`parent class` is also defined (is *inherited*) on the child class. In
 this case, :class:`CyclicGroup` does not define :meth:`__init__`,
-:meth:`__call__`, :meth:`__str__` or :meth:`__repr__`. If and when any of those
+:meth:`__call__`, :meth:`__str__`, or :meth:`__repr__`. If and when any of those
 :term:`methods <method>` are called, it is the methods from the parent class,
 :class:`Group` which are used. This is the mechanism that enables methods to be
 shared by different classes. In this case,
@@ -425,13 +502,13 @@ groups.
 Class attributes
 ~~~~~~~~~~~~~~~~
 
-At line 28 of :numref:`groups_inheritance`, the name `notation` is
+At line 32 of :numref:`groups_inheritance`, the name :attr:`symbol` is
 assigned to:
 
 .. code-block:: python3
-    :lineno-start: 28
+    :lineno-start: 32
 
-    notation = "C"
+    symbol = "C"
 
 This is also different from our previous experience: usually if we
 want to set a value on an object then we do so from inside a method, and we set
@@ -439,16 +516,12 @@ a :term:`data attribute` on the current instance, `self`, using the syntax:
 
 .. code-block:: python3
 
-    self.notation = "C"
+    self.symbol = "C"
 
 This more familiar code sets an instance attribute. In other words, an attribute
 specific to each object of the class. Our new version of the code instead sets a
 single attribute that is common to all objects of this class. This is called a
 :term:`class attribute`.
-
-.. note::
-
-    Come back and explain class attributes in more detail.
 
 .. _runtime_attributes:
 
@@ -461,9 +534,9 @@ Consider the :meth:`__str__` method:
     :lineno-start: 16
 
     def __str__(self):
-        return f"{self.notation}{self.n}"
+        return f"{self.symbol}{self.n}"
 
-This code uses `self.notation`, but this attribute isn't defined anywhere on
+This code uses `self.symbol`, but this attribute isn't defined anywhere on
 :class:`~example_code.groups.Group`. Why doesn't this cause an
 :class:`AttributeError` to be raised? One answer is that it indeed would if we
 were to instantiate :class:`Group` itself:
@@ -481,13 +554,11 @@ were to instantiate :class:`Group` itself:
     ----> 1 print(g)
 
     ~/docs/principles_of_programming/object-oriented-programming/example_code/groups.py in __str__(self)
-        39 
-        40     def __str__(self):
-    ---> 41         return f"{self.notation}{self.n}"
-        42 
-        43     def __repr__(self):
-
-    AttributeError: 'Group' object has no attribute 'notation'
+        61     def __str__(self):
+        62         """Return a string in the form symbol then group parameter."""
+    ---> 63         return f"{self.symbol}{self.n}"
+        64 
+        65     def __repr__(self):
 
 In fact, :class:`Group` is never supposed to be instantiated, it plays the role
 of an :term:`abstract class`. In other words, it's role is to provide
@@ -511,8 +582,32 @@ The reason is that the code in methods is only executed when that method is
 called, and the object `self` is the actual concrete class instance, with all of
 the attributes that are defined for it. In this case, even though
 :meth:`__str__` is defined on :class:`Group`, `self` has type
-:class:`CyclicGroup`, and therefore `self.notation` is well-defined and has the
-value `"C"`. 
+:class:`CyclicGroup`, and therefore `self.symbol` is well-defined and has the
+value `"C"`.
+
+Parametrising over class
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+When we create a class, there is always the possibility that someone will come
+along later and create a subclass of it. It is therefore an important design
+principle to avoid doing anything which might cause a problem in a subclass.
+One important example of this is anywhere where it is assumed that the class of
+:data:`self` is in fact the current class and not some subclass of it. For this
+reason, it is almost always a bad idea to explicitly use the name of the
+current class inside its definition. Instead, we should use the fact that
+`type(self)` returns the type (i.e. class) of the current object. It is for
+this reason that we typically use the formula `type(self).__name__` in the
+:meth:`~object.__repr__` method of an object. A similar procedure applies if we
+need to create another object of the same class as the current object. For
+example, one might create the next larger :class:`~example_code.groups.Group`
+than the current one with:
+
+.. code-block:: python3
+
+    type(self)(self.n+1)
+
+Observe that since `type(self)` is a :term:`class`, we can :term:`instantiate`
+it by calling it.
 
 Calling parent class methods
 ----------------------------
@@ -533,7 +628,7 @@ Calling parent class methods
             return self.length * self.width
 
         def __repr__(self):
-            return f"{self.__class__.__name__}{self.length, self.width!r}"
+            return f"{type(self).__name__}{self.length, self.width!r}"
 
 :numref:`rectangle_class` shows a basic implementation of a class describing a
 rectangle. We might also want a class defining a square. Rather than redefining
@@ -572,7 +667,7 @@ the :func:`super` function. :numref:`square_class` demonstrates its application.
             super().__init__(length, length)
 
         def __repr__(self):
-            return f"{self.__class__.__name__}({self.length!r})"
+            return f"{type(self).__name__}({self.length!r})"
 
 The :func:`super` function returns a version of the current object in which none
 of the :term:`methods <method>` have been overridden by the current
@@ -593,9 +688,26 @@ the one which best matches the circumstances. However, sometimes there is no
 good match, or it might be that the programmer wants user code to be able to
 catch exactly this exception without the risk that some other operation will
 raise the same exception and be caught by mistake. In this case, it is necessary
-to create a new type of exception. A new exception will be an object which
-behaves in most respects like other exceptions, except that it's a new
-:term:`class` and may behave differently in particular circumstances. 
+to create a new type of exception. 
+
+A new exception will be a new :term:`class` which inherits from another
+exception class. In most cases, the only argument that the exception
+:term:`constructor` takes is an error message, and the base :class:`Exception`
+class already takes this. This means that the subclass definition may only need
+to define the new class. Now, a class definition is a Python block and, as a
+matter of :term:`syntax`, a block cannot be empty. Fortunately, the Python
+language caters for this situation with the :keyword:`pass` statement, which
+simply does nothing. For example, suppose we need to be able to distinguish the
+:class:`ValueError` which occurs in entity validation from other occurrences of
+:class:`ValueError`. For example it might be advantageous to enable a user to
+catch exactly these errors. In this case, we're still talking about some form
+of value error, so we'll want our new error class to inherit from
+:class:`ValueError`. We could achieve this as follows:
+
+.. code-block:: python3
+
+    class GroupValidationError(ValueError):
+        pass
 
 .. 
     .. _abstract_base_classes:
@@ -609,7 +721,7 @@ behaves in most respects like other exceptions, except that it's a new
     :term:`parent class` for classes implementing actual groups. Those child classes
     are responsible for filling out the additional details required to make a
     working implementation. In the case of `Group`, the child classes have to
-    implement :attr:`notation`, :meth:`_validation`, and :meth:`operation`, with the
+    implement :attr:`symbol`, :meth:`_validation`, and :meth:`operation`, with the
     right interfaces. 
 
     How would a programmer who wants to implement a new family of groups know to
@@ -675,7 +787,7 @@ Glossary
 Exercises
 ---------
 
-Obtain the :doc:`skeleton code for these exercises from GitHub classroom <not_released>`. 
+Obtain the `skeleton code for these exercises from GitHub classroom <https://classroom.github.com/a/VXIC_gES>`__. 
 
 .. proof:exercise::
 
@@ -683,36 +795,74 @@ Obtain the :doc:`skeleton code for these exercises from GitHub classroom <not_re
     permutations of `n` symbols and whose group operation is the composition of
     those permutations: :math:`a \cdot b = a(b)`.
 
-    In this week's skeleton code repository, create package called :mod:`groups`
-    containing a module called :mod:`symmetric_groups`. Define a new class
-    :class:`SymmetricGroup` which inherits from
+    In this week's skeleton code repository, create package called
+    :mod:`groups` containing a module called :mod:`symmetric_groups`. Define a
+    new class :class:`SymmetricGroup` which inherits from
     :class:`example_code.groups.Group` and implements the symmetric group of
-    order `n`. You will need to implement the group operation and the validation
-    of group element values. Group elements can be represented by sequences
-    containing permutations of the integers from 0 to `n-1`. You will find it
-    advantageous to convert these permutations to :func:`numpy.array` using
-    :func:`numpy.asarray` because the indexing rules for that type mean that the
-    group operation can simply be implemented by indexing the first permutation
-    with the second: `a[b]`.
+    order `n`. You will need to implement the group operation and the
+    validation of group element values. Group elements can be represented by
+    sequences containing permutations of the integers from 0 to `n-1`. You will
+    find it advantageous to represent these permutations as
+    :class:`numpy.ndarray` because the indexing rules for that type mean that
+    the group operation can simply be implemented by indexing the first
+    permutation with the second: `a[b]`.
 
-    You will also need to set the :term:`class attribute` `notation`. For this
+    You will also need to set the :term:`class attribute` :attr:`symbol`. For this
     group, this should take the value `S`.
     
     .. hint::
 
-        You will need to :keyword:`import` :class:`example_code.groups.Group`.
+        You will need to :keyword:`import` :class:`example_code.groups.Group`
+        from the `object_oriented_programming` repository that you installed
+        :ref:`in week 2 <course_repo>`. You should also `git pull` in that
+        repository in order to get any changes that have happened in the
+        intervening period.
 
     .. hint::
 
         In implementing element validation, the builtin function :func:`sorted`
         is likely to be useful.
 
-.. note:: 
 
-    Quiz exercise giving a bunch complicated inheritance pattern and asking what
-    various things print.
+.. proof:exercise::
 
-.. note:: 
+    The objective of this exercise is to create subclasses of the built-in
+    :class:`set` class which are only valid for values which pass a certain
+    test. For example, one might have a set which can only contain integers.
 
-    One exercise will be to implement another family of groups by importing and
-    inheriting from :class:`~example_code.groups.Group`.
+    1. In this week's repository, create a package called :mod:`sets` containing a
+       module `verified_sets`. Create a subclass of the inbuilt :class:`set`,
+       :class:`sets.verified_sets.VerifiedSet`. :class:`VerifiedSet` will itself 
+       be the parent of other classes which have particular verification rules.
+
+    2. Give :class:`VerifiedSet` a method :meth:`_verify` which takes a single
+       value. In the case of :class:`VerifiedSet`, :meth:`_verify` should
+       unconditionally raise :class:`NotImplementedError`. Subclasses of
+       :class:`VerifiedSet` will override this method to do something more useful.
+
+    3. For each :class:`set` method which adds items to the set,
+       :class:`VerifiedSet` will need to have its own version which calls
+       :meth:`_verify` on each item, before calling the appropriate superclass
+       method in order to actually insert the value(s). The methods which add
+       items to a set are :meth:`~frozenset.add`, :meth:`~frozenset.update`, and
+       :meth:`~frozenset.symmetric_difference_update`. 
+
+    4. For those methods which create a new set, :class:`VerifiedSet` will also
+       need to :term:`instantiate` a new object, so that the method returns a subclass of
+       :class:`VerifiedSet` instead of a plain :class:`set`.  The methods to which
+       this applies are :meth:`~frozenset.union`, :meth:`~frozenset.intersection`,
+       :meth:`~frozenset.difference`, :meth:`~frozenset.symmetric_difference`, and
+       :meth:`~frozenset.copy`.
+
+    5. Create a subclass of :class:`VerifiedSet` called :class:`IntSet` in which
+       only integers (i.e. instances of :class:`numbers.Integral`) are allowed.
+       On encountering a non-integer :meth:`IntSet._verify` should raise
+       :class:`TypeError` with an error message of the following form. For example
+       if an attempt were made to add a string to the set, the message would be
+       "IntSet expected an integer, got a str.".
+
+    6. Create a subclass of :class:`VerifiedSet` called :class:`UniqueSet` into
+       which values can only be added if they are not already in the set. You
+       should create a new exception :class:`UniquenessError`, a subclass of
+       :class:`KeyError`. :class:`UniqueSet._verify` should raise this if an
+       operation would add a duplicate value to the :class:`UniqueSet`.
